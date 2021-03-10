@@ -1,39 +1,61 @@
-function setup() {
-  createCanvas(1200,800);
-  fixedRect = createSprite(600, 200, 50, 80);
-  fixedRect.shapeColor = "green";
-   fixedRect.debug = true;
-    movingRect = createSprite(400,200,80,30);
-     movingRect.shapeColor = "green";
-     movingRect.debug = true;
+var cat,catImg1,catImg2,catImg3;
+var mouse,mouseImg1,mouseImg2,mouseImg3;
+var canvas,gardenImg
 
-     movingRect.velocityX = 2
-  fixedRect.velocityX = -2
+function preload() {
+    //load the images here
+    catImg1 = loadAnimation ("cat1.png")
+    catImg2 = loadAnimation("cat2.png","cat3.png")
+    catImg3 = loadAnimation ("cat4.png");
+    
+    mouseImg1 = loadAnimation("mouse1.png")
+    mouseImg2 = loadAnimation("mouse2.png","mouse3.png")
+    mouseImg3 = loadAnimation("mouse4.png")
+     gardenImg = loadImage("garden.png")   
+}
+
+function setup(){
+    createCanvas(1000,800);
+    //create tom and jerry sprites here
+    mouse = createSprite(200,600)
+    mouse.addAnimation("mouseStanding",mouseImg1)
+    mouse.scale = 0.2
+
+    cat = createSprite(870,600);
+    cat.addAnimation("catSleeping",catImg1)
+    cat.scale = 0.15
 }
 
 function draw() {
-  background(0);  
 
-  //movingRect.x = mouseX
-  //movingRect.y = mouseY
-  
+    background(gardenImg);
+    //Write condition here to evalute if tom and jerry collide
+    if(cat.x - mouse.x < (cat.width - mouse.width)/2){
+        cat.velocityX = 0
+        cat.addAnimation("catLastImage",catImg3);
+        cat.x = 300
+        cat.scale =0.2
+        cat.changeAnimation("catLastImage");
+        mouse.addAnimation("mouseLastImg",mouseImg3);
+        mouse.scale =0.15
+        mouse.changeAnimation("mouseLastImg");
 
-  if(movingRect.x- fixedRect.x< movingRect.width/2 +fixedRect.width/2 && 
-    fixedRect.x - movingRect.x <movingRect.width/2 +fixedRect.width/2&&
-    movingRect.y- fixedRect.y< movingRect.height/2 +fixedRect.height/2 && 
-    fixedRect.y - movingRect.y <movingRect.height/2 +fixedRect.height/2 ){
-      fixedRect.shapeColor = "red";
-      movingRect.shapeColor = "red"
-    }
-    else{
-      fixedRect.shapeColor = "green";
-      movingRect.shapeColor = "green"
-    }
-    if(movingRect.x- fixedRect.x< movingRect.width/2 +fixedRect.width/2 && 
-      fixedRect.x - movingRect.x <movingRect.width/2 +fixedRect.width/2){
-        movingRect.velocityX = movingRect.velocityX*(-1)
-        fixedRect.velocityX = fixedRect.velocityX*(-1)
-      }
+    drawSprites();
+}
 
-  drawSprites();
+
+function keyPressed(){
+
+  //For moving and changing animation write code here
+  if(keyCode === LEFT_ARROW){
+    cat.velocityX = -5; 
+    cat.addAnimation("catRunning", catImg2);
+    cat.changeAnimation("catRunning");
+
+    mouse.addAnimation("mouseTeasing", mouseImg2);
+    mouse.changeAnimation("mouseTeasing");
+    
+
+}
+}
 }
